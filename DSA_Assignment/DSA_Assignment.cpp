@@ -16,6 +16,7 @@ using namespace std;
  
 int sscanf_s();
 void Menu(BookingHashTable hashBookingTable);
+void particularDateGuest(ParticularDateHashTable dateHashTable);
 
 int main()
 {
@@ -84,10 +85,39 @@ int main()
 		else
 			bookingList.add(line);
 	}
-	hashBookingTable.print();
-	cout << "NEXT IS DATE HASH TABLE" << endl;
-	dateHashTable.print();
+
+	particularDateGuest(dateHashTable);
+
 	//Menu(hashBookingTable);
+}
+
+ //Displaying guests staying in the hotel on a particular date
+void particularDateGuest(ParticularDateHashTable dateHashTable) 
+{
+
+	cout << "====" << "Guests staying at hotel on a particular date" << "====" << endl;
+	string desiredDate;
+	string input;
+	cout << "Enter date: ";
+	getline(cin, desiredDate);
+
+	vector<ItemType1> array = dateHashTable.get(desiredDate);
+
+	for (int i = 0; i < array.size(); i++)
+	{
+		Bookings pulledBooking = array[i];
+		cout << endl;
+		cout << "====" << "Booking ID: " << pulledBooking.getBookingID() << "====" << endl;
+		cout << endl;
+		cout << "Guest Name: " << pulledBooking.getGuestName() << endl;
+		cout << "Room Type: " << pulledBooking.getRoomType() << endl;
+		cout << "Room No.: " << pulledBooking.getRoomNo() << endl;
+		cout << "Number of Guests: " << pulledBooking.getNumberGuest() << endl;
+		cout << "Check-in Date: " << pulledBooking.getCheckIn() << endl;
+		cout << "Check-out Date: " << pulledBooking.getCheckOut() << endl;
+		cout << "Status: " << pulledBooking.getRoomStatus() << endl;
+		cout << "Date Booked: " << pulledBooking.getBookingDate() << endl;
+	}
 }
 
 void Menu(BookingHashTable hashBookingTable) {

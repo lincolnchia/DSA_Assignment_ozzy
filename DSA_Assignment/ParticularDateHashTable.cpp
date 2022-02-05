@@ -152,12 +152,39 @@ vector<ItemType1> ParticularDateHashTable::get(KeyType key)
     ItemType1 item;
     vector< ItemType1 > arr;
 
+    // Turning the user input into time_t object so I can compare to a room's checkIn/checkOut date
+    char keyString[20];
+    tm keyResult{};
+    strcpy_s(keyString, key.c_str());
+    sscanf_s(keyString, "%d/%d/%4d  %d:%d:%d", &keyResult.tm_mday, &keyResult.tm_mon, &keyResult.tm_year, &keyResult.tm_hour, &keyResult.tm_min, &keyResult.tm_sec);
+    keyResult.tm_year = keyResult.tm_year - 1900;
+    keyResult.tm_mon = keyResult.tm_mon - 1;
+    time_t keyTime = mktime(&keyResult);
+
     //Travelling linked list
     NodeDate* tempNode = items[i];
     while (tempNode != NULL)
     {
-        //If the current item's key matches what we want to find,
-        if (tempNode->key == key)
+        // Turning Booking object checkIn date to time_t object
+        char checkInString[20];
+        tm checkInResult{};
+        strcpy_s(checkInString, tempNode->item.getCheckIn().c_str());
+        sscanf_s(checkInString, "%d/%d/%4d  %d:%d:%d", &checkInResult.tm_mday, &checkInResult.tm_mon, &checkInResult.tm_year, &checkInResult.tm_hour, &checkInResult.tm_min, &checkInResult.tm_sec);
+        checkInResult.tm_year = checkInResult.tm_year - 1900;
+        checkInResult.tm_mon = checkInResult.tm_mon - 1;
+        time_t checkInTime = mktime(&checkInResult);
+
+        // Turning Booking object checkOut date to time_t object
+        char checkOutString[20];
+        tm checkOutResult{};
+        strcpy_s(checkOutString, tempNode->item.getCheckOut().c_str());
+        sscanf_s(checkOutString, "%d/%d/%4d  %d:%d:%d", &checkOutResult.tm_mday, &checkOutResult.tm_mon, &checkOutResult.tm_year, &checkOutResult.tm_hour, &checkOutResult.tm_min, &checkOutResult.tm_sec);
+        checkOutResult.tm_year = checkOutResult.tm_year - 1900;
+        checkOutResult.tm_mon = checkOutResult.tm_mon - 1;
+        time_t checkOutTime = mktime(&checkOutResult);
+
+        // If the date that was input falls between checkIn and checkOut dates, return the item
+        if (checkInTime <= keyTime && keyTime <= checkOutTime)
         {
             //Set the returning item to the tempNode's item
             item = tempNode->item;
@@ -170,6 +197,36 @@ vector<ItemType1> ParticularDateHashTable::get(KeyType key)
     //Return the item, item = "" if nothing found
     return arr;
 }
+
+//vector<ItemType1> ParticularDateHashTable::get(KeyType key)
+//{
+//    //Initializing hash
+//    int i = hash(key);
+//
+//    //Item
+//    ItemType1 item;
+//    vector< ItemType1 > arr;
+//
+//    //Travelling linked list
+//    NodeDate* tempNode = items[i];
+//    while (tempNode != NULL)
+//    {
+//        item = tempNode->item;
+//        arr.push_back(item);
+//        //If the current item's key matches what we want to find,
+//        if (tempNode->key == key)
+//        {
+//            //Set the returning item to the tempNode's item
+//            item = tempNode->item;
+//            arr.push_back(item);
+//        }
+//        //Else move down the linked list
+//        tempNode = tempNode->next;
+//    }
+//
+//    //Return the item, item = "" if nothing found
+//    return arr;
+//}
 
 bool ParticularDateHashTable::isEmpty()
 {
