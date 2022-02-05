@@ -144,11 +144,13 @@
     <ClCompile Include="DSA_Assignment.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="DateTimeApp.cpp" />
+    <ClCompile Include="ParticularDateHashTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BookingHashTable.h" />
     <ClInclude Include="Bookings.h" />
     <ClInclude Include="List.h" />
+    <ClInclude Include="ParticularDateHashTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

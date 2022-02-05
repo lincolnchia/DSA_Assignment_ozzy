@@ -87,7 +87,7 @@ void Menu(BookingHashTable hashBookingTable) {
 	string datetime;
 	char aString[20];
 	tm result{};
-	cout << "Input name to be book:" ;
+	cout << "Input name to be booked:" ;
 	getline(cin, input);
 	vector<ItemType1> array = hashBookingTable.get	(input);
 	for (int i = 0; i < array.size();i++) {
@@ -100,6 +100,9 @@ void Menu(BookingHashTable hashBookingTable) {
 		result.tm_mon = result.tm_mon - 1;
 		time_t t = mktime(&result);
 		cout << t << endl;
+		long int timeInt = static_cast<long int> (time(NULL));
+		cout << "testing" << endl;
+		cout << timeInt << endl;
 	}
 }
 
