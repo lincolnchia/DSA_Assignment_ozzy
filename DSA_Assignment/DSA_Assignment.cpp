@@ -10,6 +10,7 @@
 #include "list.h"
 #include "Bookings.h"
 #include "BookingHashTable.h"
+#include "ParticularDateHashTable.h"
  
 using namespace std;
  
@@ -21,6 +22,8 @@ int main()
 	List bookingList;
 	BookingHashTable hashBookingTable;
 	hashBookingTable.~BookingHashTable();
+	ParticularDateHashTable dateHashTable;
+	dateHashTable.~ParticularDateHashTable();
 	ifstream myFile;
 	myFile.open("BookingsAssignment.csv");
 	
@@ -60,6 +63,8 @@ int main()
 					newBooking.setSpecialRequest(bookingList.get(9));
 					//Function to make object from BookingList
 					hashBookingTable.add(bookingList.get(2), newBooking);
+					// dateHashTable stores Bookings objects by their checkin date
+					dateHashTable.add(bookingList.get(6), newBooking);
 				}
 				
 
@@ -79,7 +84,10 @@ int main()
 		else
 			bookingList.add(line);
 	}
-	Menu(hashBookingTable);
+	hashBookingTable.print();
+	cout << "NEXT IS DATE HASH TABLE" << endl;
+	dateHashTable.print();
+	//Menu(hashBookingTable);
 }
 
 void Menu(BookingHashTable hashBookingTable) {
@@ -99,10 +107,6 @@ void Menu(BookingHashTable hashBookingTable) {
 		result.tm_year = result.tm_year - 1900;
 		result.tm_mon = result.tm_mon - 1;
 		time_t t = mktime(&result);
-		cout << t << endl;
-		long int timeInt = static_cast<long int> (time(NULL));
-		cout << "testing" << endl;
-		cout << timeInt << endl;
 	}
 }
 

@@ -13,7 +13,7 @@ ParticularDateHashTable::ParticularDateHashTable()
 
 ParticularDateHashTable::~ParticularDateHashTable()
 {
-    for (int i = 0; i < MAX_SIZE; i++)
+    for (int i = 0; i < MAX_SIZE_DATE; i++)
     {
         items[i] = NULL;
     }
@@ -36,7 +36,9 @@ int ParticularDateHashTable::charvalue(char c)
         return -1;
 }
  
-// Creating hash key with time_t variable, key will be seconds after 1900
+// Creating hashkey using the month of the year, hash table will contain bookings over 2 years so months in 2021 have 12 added to them
+// Hash table will hold 24 months
+// i.e Jan 2020 = 1, Jan 2021 = 13, Nov 2020 = 11, Nov 2021 = 23
 int ParticularDateHashTable::hash(KeyType key)
 {
     string delimiter = "/";
@@ -61,7 +63,7 @@ int ParticularDateHashTable::hash(KeyType key)
 
             if (yearNumber == 2021) 
             {
-                return monthNumber * 2;
+                return monthNumber + 12;
             }
 
             return monthNumber;
@@ -75,21 +77,22 @@ bool ParticularDateHashTable::add(KeyType newKey, ItemType1 newItem)
     int index = hash(newKey);
     if (items[index] == NULL) 
     {
-        Node* n = new Node();
+        NodeDate* n = new NodeDate();
         n->key = newKey;
         n->item = newItem;
         n->next = NULL;
         items[index] = n;
+        //size++;
     }
     else //collision
     {
-        Node* temp = items[index];
+        NodeDate* temp = items[index];
 
         while (temp->next != NULL) {
             temp = temp->next;
         }
 
-        Node* n = new Node();
+        NodeDate* n = new NodeDate();
         n->key = newKey;
         n->item = newItem;
         n->next = NULL;
@@ -119,7 +122,7 @@ void ParticularDateHashTable::remove(KeyType key)
         else
         {
             //Travel down the linked list
-            Node* tempNode = items[i];
+            NodeDate* tempNode = items[i];
             //While the current node is not NULL,
             //Using tempNode != NULL so that the final iteration also gets checked
             //If using tempNode->next != NULL, tempNode will be set to the final node but will not be checked
@@ -150,7 +153,7 @@ vector<ItemType1> ParticularDateHashTable::get(KeyType key)
     vector< ItemType1 > arr;
 
     //Travelling linked list
-    Node* tempNode = items[i];
+    NodeDate* tempNode = items[i];
     while (tempNode != NULL)
     {
         //If the current item's key matches what we want to find,
@@ -182,21 +185,22 @@ int ParticularDateHashTable::getLength()
 void ParticularDateHashTable::print()
 {
     //For every position in the BookingHashTable,
-    for (int i = 0; i < MAX_SIZE; i++)
+    for (int i = 0; i < MAX_SIZE_DATE; i++)
     {
         //If position is not NULL
         if (items[i] != NULL)
         {
             //Travel down the linked list
-            Node* tempNode = items[i];
+            NodeDate* tempNode = items[i];
             //If the current tempNode is not NULLm
             while (tempNode != NULL)
             {
                 //Print item and key
-                cout << tempNode->item.getBookingID() << " | " << tempNode->key << endl;
+                cout << tempNode->item.getCheckIn() << " | " << i << " | " << tempNode->key << endl;
                 //Go to next node
                 tempNode = tempNode->next;
             }
         }
     }
+    cout << "The size of the dictionary is :" << size << endl;
 }

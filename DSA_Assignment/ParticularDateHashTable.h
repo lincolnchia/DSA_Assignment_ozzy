@@ -6,22 +6,23 @@
 #include <vector>
 using namespace std;
 
-const int MAX_SIZE = 101;
+// MAX_SIZE of the hash table is 24 as it will store booking history across 2 years
+const int MAX_SIZE_DATE = 24;
 typedef string KeyType;
 typedef Bookings ItemType1;
 
-struct Node
+struct NodeDate
 {
 	KeyType	 key;   // search key
 	ItemType1 item;	// data item
-	Node* next;	// pointer pointing to next item with same search key
+	NodeDate* next;	// pointer pointing to next item with same search key
 };
 
 class ParticularDateHashTable
 {
 private:
 
-	Node* items[MAX_SIZE];
+	NodeDate* items[MAX_SIZE_DATE];
 	int  size;			// number of items in the BookingHashTable
 
 public:
