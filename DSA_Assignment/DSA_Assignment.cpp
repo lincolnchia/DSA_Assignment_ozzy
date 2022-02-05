@@ -95,7 +95,7 @@ int main()
 void particularDateGuest(ParticularDateHashTable dateHashTable) 
 {
 
-	cout << "====" << "Guests staying at hotel on a particular date" << "====" << endl;
+	cout << "==== " << "Guests staying at hotel on a particular date" << " ====" << endl;
 	string desiredDate;
 	string input;
 	cout << "Enter date: ";
