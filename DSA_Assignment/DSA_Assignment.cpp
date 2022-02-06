@@ -175,6 +175,7 @@ void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, Particula
 	cout << "4) Display particular month dates each room is occupied" << endl;
 	cout << "5) See the particular booking for guest using name" << endl;
 	cout << "6) Delete a Booking" << endl;
+	cout << "7) View the most popular room type" << endl;
 	cout << "0) Exit Functions" << endl;
 	cout << "============================================================"<< endl;
 	cout << "Input options:" ;
@@ -214,6 +215,10 @@ void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, Particula
 	}
 	else if (input == "8") {
 		ExportExcel();
+	}
+	else if (input == "7") {
+		hashBookingTable.returnPopularRoom();
+		Menu(hashBookingTable, finalRoomsList, dateHashTable);
 	}
 	else if (input == "0") {
 		exit;

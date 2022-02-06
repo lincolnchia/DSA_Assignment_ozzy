@@ -7,7 +7,7 @@
 using namespace std;
 
 // MAX_SIZE of the hash table is 24 as it will store booking history across 2 years
-const int MAX_SIZE_DATE = 24;
+const int MAX_SIZE_DATE = 25;
 typedef string KeyType;
 typedef Bookings ItemType1;
 

@@ -196,20 +196,30 @@ void ParticularDateHashTable::getParticularDate(KeyType key)
         //Else move down the linked list
         tempNode = tempNode->next;
     }
-    for (int i = 0; i < arr.getLength(); i++)
+
+    if (arr.getLength() == 0) 
     {
-        Bookings pulledBooking = arr.get(i);
         cout << endl;
-        cout << "==== " << "Booking ID: " << pulledBooking.getBookingID() << " ====" << endl;
+        cout << "No bookings available for specified date." << endl;
         cout << endl;
-        cout << "Guest Name: " << pulledBooking.getGuestName() << endl;
-        cout << "Room Type: " << pulledBooking.getRoomType() << endl;
-        cout << "Room No.: " << pulledBooking.getRoomNo() << endl;
-        cout << "Number of Guests: " << pulledBooking.getNumberGuest() << endl;
-        cout << "Check-in Date: " << pulledBooking.getCheckIn() << endl;
-        cout << "Check-out Date: " << pulledBooking.getCheckOut() << endl;
-        cout << "Status: " << pulledBooking.getRoomStatus() << endl;
-        cout << "Date Booked: " << pulledBooking.getBookingDate() << endl;
+    }
+    else 
+    {
+        for (int i = 0; i < arr.getLength(); i++)
+        {
+            Bookings pulledBooking = arr.get(i);
+            cout << endl;
+            cout << "==== " << "Booking ID: " << pulledBooking.getBookingID() << " ====" << endl;
+            cout << endl;
+            cout << "Guest Name: " << pulledBooking.getGuestName() << endl;
+            cout << "Room Type: " << pulledBooking.getRoomType() << endl;
+            cout << "Room No.: " << pulledBooking.getRoomNo() << endl;
+            cout << "Number of Guests: " << pulledBooking.getNumberGuest() << endl;
+            cout << "Check-in Date: " << pulledBooking.getCheckIn() << endl;
+            cout << "Check-out Date: " << pulledBooking.getCheckOut() << endl;
+            cout << "Status: " << pulledBooking.getRoomStatus() << endl;
+            cout << "Date Booked: " << pulledBooking.getBookingDate() << endl;
+        }
     }
     //Return the item, item = "" if nothing found
     /*return arr;*/
@@ -222,12 +232,6 @@ int ParticularDateHashTable::hashMonthWords(KeyType monthKey, KeyType yearKey)
     // If length of month is more than 2, it is a word
     if (monthKey.length() > 2)
     {
-        // Convert the month to lower case
-        for (int i = 0; i < monthKey.length(); i++)
-        {
-            monthKey[i] = tolower(monthKey[i]);
-        }
-
         // Assign a month value
         if (monthKey == "january")
         {
@@ -306,56 +310,80 @@ int ParticularDateHashTable::hashMonthWords(KeyType monthKey, KeyType yearKey)
 // Display for a particular month, the dates that each room is occupied
 void ParticularDateHashTable::returnRoomsMonth(KeyType month, KeyType year) 
 {
-    // Get the hash for user input
-    int hashKey = hashMonthWords(month, year);
-
-    //Item
-    ItemType1 item;
-    ArrayListingBookings arr;
-
-    //Travelling linked list
-    NodeDate* tempNode = items[hashKey];
-    while (tempNode != NULL)
+    // Convert the month to lower case
+    for (int i = 0; i < month.length(); i++)
     {
-        item = tempNode->item;
-        arr.add(item);
-        //Else move down the linked list
-        tempNode = tempNode->next;
+        month[i] = tolower(month[i]);
     }
 
-    cout << "==== Bookings for the month: " << month << " ====" << endl;
-
-    for (int i = 100; i <= 120; i++) 
+    if (month != "january" && month != "february" && month != "march" && month != "april" && month != "may" && month != "june" && month != "july" && month != "august" && month != "september" && month != "october" && month != "november" && month != "december" && year != "2020" && year != "2021")
     {
-        for (int arrayCounter = 0; arrayCounter < arr.getLength(); arrayCounter++) 
+        cout << endl;
+        cout << "Enter a valid date" << endl;
+        cout << endl;
+    }
+    else
+    {
+        // Get the hash for user input
+        int hashKey = hashMonthWords(month, year);
+
+        //Item
+        ItemType1 item;
+        ArrayListingBookings arr;
+
+        //Travelling linked list
+        NodeDate* tempNode = items[hashKey];
+        while (tempNode != NULL)
         {
-            Bookings pulledBooking = arr.get(arrayCounter);
-            string roomNo = pulledBooking.getRoomNo();
+            item = tempNode->item;
+            arr.add(item);
+            //Else move down the linked list
+            tempNode = tempNode->next;
+        }
 
-            string delimiter = " ";
-            size_t pos = 0;
-            string token;
-            int intRoomNo;
-            while ((pos = roomNo.find(delimiter)) != string::npos)
-            {
-                intRoomNo = stoi(roomNo.erase(0, pos + delimiter.length()));
-            }
+        cout << "==== Bookings for the month of " << month << " ====" << endl;
 
-            if (intRoomNo == i) 
+        if (arr.getLength() == 0)
+        {
+            cout << endl;
+            cout << "There are no bookigns for the month." << endl;
+            cout << endl;
+        }
+        else
+        {
+            for (int i = 100; i <= 120; i++)
             {
-                cout << endl;
-                cout << "==== Bookings for Room No: " << pulledBooking.getRoomNo() << " ====" << endl;
-                cout << endl;
-                cout << "==== " << "Booking ID: " << pulledBooking.getBookingID() << " ====" << endl;
-                cout << endl;
-                cout << "Guest Name: " << pulledBooking.getGuestName() << endl;
-                cout << "Room Type: " << pulledBooking.getRoomType() << endl;
-                cout << "Room No.: " << pulledBooking.getRoomNo() << endl;
-                cout << "Number of Guests: " << pulledBooking.getNumberGuest() << endl;
-                cout << "Check-in Date: " << pulledBooking.getCheckIn() << endl;
-                cout << "Check-out Date: " << pulledBooking.getCheckOut() << endl;
-                cout << "Status: " << pulledBooking.getRoomStatus() << endl;
-                cout << "Date Booked: " << pulledBooking.getBookingDate() << endl;
+                for (int arrayCounter = 0; arrayCounter < arr.getLength(); arrayCounter++)
+                {
+                    Bookings pulledBooking = arr.get(arrayCounter);
+                    string roomNo = pulledBooking.getRoomNo();
+
+                    string delimiter = " ";
+                    size_t pos = 0;
+                    string token;
+                    int intRoomNo;
+                    while ((pos = roomNo.find(delimiter)) != string::npos)
+                    {
+                        intRoomNo = stoi(roomNo.erase(0, pos + delimiter.length()));
+                    }
+
+                    if (intRoomNo == i)
+                    {
+                        cout << endl;
+                        cout << "==== Bookings for Room No: " << pulledBooking.getRoomNo() << " ====" << endl;
+                        cout << endl;
+                        cout << "==== " << "Booking ID: " << pulledBooking.getBookingID() << " ====" << endl;
+                        cout << endl;
+                        cout << "Guest Name: " << pulledBooking.getGuestName() << endl;
+                        cout << "Room Type: " << pulledBooking.getRoomType() << endl;
+                        cout << "Room No.: " << pulledBooking.getRoomNo() << endl;
+                        cout << "Number of Guests: " << pulledBooking.getNumberGuest() << endl;
+                        cout << "Check-in Date: " << pulledBooking.getCheckIn() << endl;
+                        cout << "Check-out Date: " << pulledBooking.getCheckOut() << endl;
+                        cout << "Status: " << pulledBooking.getRoomStatus() << endl;
+                        cout << "Date Booked: " << pulledBooking.getBookingDate() << endl;
+                    }
+                }
             }
         }
     }

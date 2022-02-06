@@ -24,7 +24,11 @@ class BookingHashTable
 private:
 
 	Node* items[MAX_SIZEHashTable];
-	int  size;			// number of items in the BookingHashTable
+	int size;			// number of items in the BookingHashTable
+	int deluxeCVCounter;
+	int standardCVCounter;
+	int executiveSVCounter;
+	int presidentSuiteCounter;
 
 public:
 
@@ -43,6 +47,8 @@ public:
 	// post: new item is added to the BookingHashTable
 	//       size of BookingHashTable is increased by 1
 	bool add(KeyType newKey, ItemType1 newItem);
+
+	void returnPopularRoom();
 
 	// remove an item with the specified key in the BookingHashTable
 	// pre : key must exist in the BookingHashTable
