@@ -63,6 +63,8 @@ public:
 	// return the item with the specified key from the BookingHashTable
 	ArrayListingBookings get(KeyType key);
 
+	ArrayListingBookings getAll(int intkey);
+
 	// check if the BookingHashTable is empty
 	// pre : none
 	// post: none

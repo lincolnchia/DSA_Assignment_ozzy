@@ -27,7 +27,7 @@ void Checkinguest(BookingHashTable hashBookingTable, RoomsList finalRoomsList, P
 void CreateBooking(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable);
 void PrintBooking(BookingHashTable hashBookingTable);
 void DeleteBooking(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable);
-void ExportExcel();
+void ExportExcel(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable);
 
 int main()
 {
@@ -176,6 +176,7 @@ void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, Particula
 	cout << "5) See the particular booking for guest using name" << endl;
 	cout << "6) Delete a Booking" << endl;
 	cout << "7) View the most popular room type" << endl;
+	cout << "8) Export data to excel" << endl;
 	cout << "0) Exit Functions" << endl;
 	cout << "============================================================"<< endl;
 	cout << "Input options:" ;
@@ -184,12 +185,10 @@ void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, Particula
 	if (input =="1")
 	{
 		Checkinguest(hashBookingTable, finalRoomsList, dateHashTable);
-		Menu(hashBookingTable, finalRoomsList, dateHashTable);
 	}
 	else if (input == "2")
 	{   
 		CreateBooking(hashBookingTable, finalRoomsList, dateHashTable);
-		Menu(hashBookingTable, finalRoomsList, dateHashTable);
 	}
 	else if (input == "3") {
 		particularDateGuest(dateHashTable);
@@ -213,12 +212,12 @@ void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, Particula
 	else if (input == "6") {
 		DeleteBooking(hashBookingTable, finalRoomsList, dateHashTable);
 	}
-	else if (input == "8") {
-		ExportExcel();
-	}
 	else if (input == "7") {
 		hashBookingTable.returnPopularRoom();
 		Menu(hashBookingTable, finalRoomsList, dateHashTable);
+	}
+	else if (input == "8") {
+		ExportExcel(hashBookingTable, finalRoomsList, dateHashTable);
 	}
 	else if (input == "0") {
 		exit;
@@ -283,13 +282,13 @@ void Checkinguest(BookingHashTable hashBookingTable, RoomsList finalRoomsList, P
 	if (bookingsCounter == 0)
 	{
 		cout << "There are no bookings" << endl << endl;
+		Menu(hashBookingTable, finalRoomsList, dateHashTable);
 	}
 
 	//asking for which booking to enter
 	else {
 		cout << "Which Booking would you like to check in for: ";
 		getline(cin, bookingInput);
-		cin.clear();
 		int intbookingInput;
 		stringstream ss;
 		ss << bookingInput;
@@ -316,7 +315,7 @@ void Checkinguest(BookingHashTable hashBookingTable, RoomsList finalRoomsList, P
 						hashBookingTable.remove(array.get(i).getGuestName(), array.get(i));
 						hashBookingTable.add(array.get(i).getGuestName(), updatedBooking);
 					    finalRoomsList.get(j).setStatus("Yes");
-						break;
+						Menu(hashBookingTable, finalRoomsList, dateHashTable);
 					}
 				}
 			}
@@ -413,8 +412,38 @@ void DeleteBooking(BookingHashTable hashBookingTable, RoomsList finalRoomsList, 
 	
 	Menu(hashBookingTable, finalRoomsList, dateHashTable);
 }
-void ExportExcel() {
-
+void ExportExcel(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable) {
+	string line;
+	ofstream Newfile;
+	Newfile.open("New_Bookings.csv");
+	for (int i = 0; i < hashBookingTable.getLength(); i++) 
+	{
+		ArrayListingBookings array = hashBookingTable.getAll(i);
+		for (int j = 0; j < array.getLength(); j++ ) {
+			line = array.get(j).getBookingID();
+			Newfile << line + ",";
+			line = array.get(j).getBookingDate();
+			Newfile << line + ",";
+			line = array.get(j).getGuestName();
+			Newfile << line + ",";
+			line = array.get(j).getRoomNo();
+			Newfile << line + ",";
+			line = array.get(j).getRoomType();
+			Newfile << line + ",";
+			line = array.get(j).getRoomStatus();
+			Newfile << line + ",";
+			line = array.get(j).getCheckIn();
+			Newfile << line + ",";
+			line = array.get(j).getCheckOut();
+			Newfile << line + ",";
+			line = array.get(j).getNumberGuest();
+			Newfile << line + ",";
+			line = array.get(j).getSpecialRequest();
+			Newfile << line ;
+			Newfile << "\n";
+		}
+	}
+	Menu(hashBookingTable, finalRoomsList, dateHashTable);
 }
 
 

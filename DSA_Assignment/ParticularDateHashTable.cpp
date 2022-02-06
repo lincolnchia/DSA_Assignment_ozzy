@@ -62,13 +62,9 @@ int ParticularDateHashTable::hash(KeyType key)
 
             int monthNumber = stoi(token);
             int yearNumber = stoi(key);
+            int yearMultiplier = yearNumber-2020;
 
-            if (yearNumber == 2021) 
-            {
-                return monthNumber + 12;
-            }
-
-            return monthNumber;
+            return monthNumber + 12 * yearMultiplier;
         }
 
     }
@@ -282,26 +278,18 @@ int ParticularDateHashTable::hashMonthWords(KeyType monthKey, KeyType yearKey)
             monthKeyInt = 12;
         }
 
+        int yearMultiplier = stoi(yearKey) - 2020;
+        monthKeyInt = monthKeyInt + 12 * yearMultiplier;
+
         // If the year is 2021, add 12 to month value
-        if (yearKey == "2021")
-        {
-            monthKeyInt = monthKeyInt + 12;
-        }
+
     }
     // Else if month input already the month number
     else
     {
-        // If the year is 2021, add 12 to it
-        if (yearKey == "2021")
-        {
-            // Convert the month input into int and add 12
-            monthKeyInt = stoi(monthKey) + 12;
-        }
-        else
-        {
-            // Convert the month input into int 
-            monthKeyInt = stoi(monthKey);
-        }
+        monthKeyInt = stoi(monthKey);
+        int yearMultiplier = stoi(yearKey) - 2020;
+        monthKeyInt = monthKeyInt + 12 * yearMultiplier;
     }
 
     return monthKeyInt;

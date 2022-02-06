@@ -226,6 +226,7 @@ ArrayListingBookings BookingHashTable::get(KeyType key)
     Node* tempNode = items[i];
     while (tempNode != NULL)
     {
+        item = tempNode->item;
         //If the current item's key matches what we want to find,
         if (tempNode->key == key)
         {
@@ -234,6 +235,27 @@ ArrayListingBookings BookingHashTable::get(KeyType key)
             arr.add(item);
         }
         //Else move down the linked list
+        tempNode = tempNode->next;
+    }
+
+    //Return the item, item = "" if nothing found
+    return arr;
+}
+
+ArrayListingBookings BookingHashTable::getAll(int intkey)
+{
+    //Item
+    ItemType1 item;
+    ArrayListingBookings arr;
+
+    //Travelling linked list
+    Node* tempNode = items[intkey];
+    while (tempNode != NULL)
+    {
+        item = tempNode->item;
+        //If the current item's key matches what we want to find,
+        //Else move down the linked list
+        arr.add(item);
         tempNode = tempNode->next;
     }
 
