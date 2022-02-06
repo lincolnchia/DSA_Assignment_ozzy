@@ -37,6 +37,10 @@ public:
 
 	int hash(KeyType key);
 
+	int hashMonthWords(KeyType monthKey, KeyType yearKey);
+
+	void returnRoomsMonth(KeyType month, KeyType year);
+
 	// add a new item with the specified key to the BookingHashTable
 	// pre : none
 	// post: new item is added to the BookingHashTable

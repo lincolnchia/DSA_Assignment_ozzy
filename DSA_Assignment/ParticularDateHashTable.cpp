@@ -199,6 +199,182 @@ vector<ItemType1> ParticularDateHashTable::getParticularDate(KeyType key)
     return arr;
 }
 
+// Hashing function for words i.e November 2021 and not DD/MM/YYYY
+int ParticularDateHashTable::hashMonthWords(KeyType monthKey, KeyType yearKey) 
+{
+    int monthKeyInt;
+    // If length of month is more than 2, it is a word
+    if (monthKey.length() > 2)
+    {
+        // Convert the month to lower case
+        for (int i = 0; i < monthKey.length(); i++)
+        {
+            monthKey[i] = tolower(monthKey[i]);
+        }
+
+        // Assign a month value
+        if (monthKey == "january")
+        {
+            monthKeyInt = 1;
+        }
+        else if (monthKey == "february")
+        {
+            monthKeyInt = 2;
+        }
+        else if (monthKey == "march")
+        {
+            monthKeyInt = 3;
+        }
+        else if (monthKey == "april")
+        {
+            monthKeyInt = 4;
+        }
+        else if (monthKey == "may")
+        {
+            monthKeyInt = 5;
+        }
+        else if (monthKey == "june")
+        {
+            monthKeyInt = 6;
+        }
+        else if (monthKey == "july")
+        {
+            monthKeyInt = 7;
+        }
+        else if (monthKey == "august")
+        {
+            monthKeyInt = 8;
+        }
+        else if (monthKey == "september")
+        {
+            monthKeyInt = 9;
+        }
+        else if (monthKey == "october")
+        {
+            monthKeyInt = 10;
+        }
+        else if (monthKey == "november")
+        {
+            monthKeyInt = 11;
+        }
+        else if (monthKey == "december")
+        {
+            monthKeyInt = 12;
+        }
+
+        // If the year is 2021, add 12 to month value
+        if (yearKey == "2021")
+        {
+            monthKeyInt = monthKeyInt + 12;
+        }
+    }
+    // Else if month input already the month number
+    else
+    {
+        // If the year is 2021, add 12 to it
+        if (yearKey == "2021")
+        {
+            // Convert the month input into int and add 12
+            monthKeyInt = stoi(monthKey) + 12;
+        }
+        else
+        {
+            // Convert the month input into int 
+            monthKeyInt = stoi(monthKey);
+        }
+    }
+
+    return monthKeyInt;
+}
+
+// Display for a particular month, the dates that each room is occupied
+void ParticularDateHashTable::returnRoomsMonth(KeyType month, KeyType year) 
+{
+    // Get the hash for user input
+    int hashKey = hashMonthWords(month, year);
+
+    //Item
+    ItemType1 item;
+    vector< ItemType1 > arr;
+
+    //Travelling linked list
+    NodeDate* tempNode = items[hashKey];
+    while (tempNode != NULL)
+    {
+        item = tempNode->item;
+        arr.push_back(item);
+        //Else move down the linked list
+        tempNode = tempNode->next;
+    }
+
+    cout << "==== Bookings for the month: " << month << " ====" << endl;
+
+    for (int i = 100; i <= 120; i++) 
+    {
+        for (int arrayCounter = 0; arrayCounter < arr.size(); arrayCounter++) 
+        {
+            Bookings pulledBooking = arr[arrayCounter];
+            string roomNo = pulledBooking.getRoomNo();
+
+            string delimiter = " ";
+            size_t pos = 0;
+            string token;
+            int intRoomNo;
+            while ((pos = roomNo.find(delimiter)) != string::npos)
+            {
+                intRoomNo = stoi(roomNo.erase(0, pos + delimiter.length()));
+            }
+
+            if (intRoomNo == i) 
+            {
+                cout << endl;
+                cout << "==== Bookings for Room No: " << pulledBooking.getRoomNo() << " ====" << endl;
+                cout << endl;
+                cout << "==== " << "Booking ID: " << pulledBooking.getBookingID() << " ====" << endl;
+                cout << endl;
+                cout << "Guest Name: " << pulledBooking.getGuestName() << endl;
+                cout << "Room Type: " << pulledBooking.getRoomType() << endl;
+                cout << "Room No.: " << pulledBooking.getRoomNo() << endl;
+                cout << "Number of Guests: " << pulledBooking.getNumberGuest() << endl;
+                cout << "Check-in Date: " << pulledBooking.getCheckIn() << endl;
+                cout << "Check-out Date: " << pulledBooking.getCheckOut() << endl;
+                cout << "Status: " << pulledBooking.getRoomStatus() << endl;
+                cout << "Date Booked: " << pulledBooking.getBookingDate() << endl;
+            }
+        }
+    }
+}
+
+//vector<ItemType1> ParticularDateHashTable::get(KeyType key)
+//{
+//    //Initializing hash
+//    int i = hash(key);
+//
+//    //Item
+//    ItemType1 item;
+//    vector< ItemType1 > arr;
+//
+//    //Travelling linked list
+//    NodeDate* tempNode = items[i];
+//    while (tempNode != NULL)
+//    {
+//        item = tempNode->item;
+//        arr.push_back(item);
+//        //If the current item's key matches what we want to find,
+//        if (tempNode->key == key)
+//        {
+//            //Set the returning item to the tempNode's item
+//            item = tempNode->item;
+//            arr.push_back(item);
+//        }
+//        //Else move down the linked list
+//        tempNode = tempNode->next;
+//    }
+//
+//    //Return the item, item = "" if nothing found
+//    return arr;
+//}
+
 //vector<ItemType1> ParticularDateHashTable::get(KeyType key)
 //{
 //    //Initializing hash
