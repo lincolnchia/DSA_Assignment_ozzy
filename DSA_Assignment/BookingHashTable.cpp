@@ -4,6 +4,10 @@
 BookingHashTable::BookingHashTable()
 {
     size = 0;
+    deluxeCVCounter = 0;
+    standardCVCounter = 0;
+    executiveSVCounter = 0;
+    presidentSuiteCounter = 0;
 }
 
 BookingHashTable::~BookingHashTable()
@@ -50,6 +54,23 @@ int BookingHashTable::hash(KeyType key)
 
 bool BookingHashTable::add(KeyType newKey, ItemType1 newItem)
 {
+    if (newItem.getRoomType() == "Deluxe City View") 
+    {
+        deluxeCVCounter++;
+    }
+    else if (newItem.getRoomType() == "Standard City View")
+    {
+        standardCVCounter++;
+    }
+    else if (newItem.getRoomType() == "Executive Sea View")
+    {
+        executiveSVCounter++;
+    }
+    else if (newItem.getRoomType() == "President Suite")
+    {
+        presidentSuiteCounter++;
+    }
+
     int index = hash(newKey);
     if (items[index] == NULL) {
         Node* n = new Node();
@@ -74,6 +95,41 @@ bool BookingHashTable::add(KeyType newKey, ItemType1 newItem)
     }
     size++;
     return true;
+}
+
+void BookingHashTable::returnPopularRoom() 
+{
+    if (deluxeCVCounter > standardCVCounter && deluxeCVCounter > executiveSVCounter && deluxeCVCounter > presidentSuiteCounter) 
+    {
+        cout << endl;
+        cout << "Most popular room type: Deluxe City View" << endl;
+        cout << "Number of times booked: " << deluxeCVCounter << endl;
+        cout << endl;
+    }
+
+    else if (standardCVCounter > deluxeCVCounter && standardCVCounter > executiveSVCounter && standardCVCounter > presidentSuiteCounter)
+    {
+        cout << endl;
+        cout << "Most popular room type: Standard City View" << endl;
+        cout << "Number of times booked: " << standardCVCounter << endl;
+        cout << endl;
+    }
+
+    else if (executiveSVCounter > standardCVCounter && executiveSVCounter > deluxeCVCounter && executiveSVCounter > presidentSuiteCounter)
+    {
+        cout << endl;
+        cout << "Most popular room type: Executive Sea View" << endl;
+        cout << "Number of times booked: " << executiveSVCounter << endl;
+        cout << endl;
+    }
+
+    else if (presidentSuiteCounter > standardCVCounter && presidentSuiteCounter > executiveSVCounter && presidentSuiteCounter > executiveSVCounter)
+    {
+        cout << endl;
+        cout << "Most popular room type: President Suite" << endl;
+        cout << "Number of times booked: " << presidentSuiteCounter << endl;
+        cout << endl;
+    }
 }
 
 void BookingHashTable::remove(KeyType key)
