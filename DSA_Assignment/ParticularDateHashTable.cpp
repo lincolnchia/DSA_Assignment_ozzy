@@ -143,7 +143,8 @@ void ParticularDateHashTable::remove(KeyType key)
     }
 }
 
-vector<ItemType1> ParticularDateHashTable::get(KeyType key)
+// Returns the guests staying in the hotel on a particular date
+vector<ItemType1> ParticularDateHashTable::getParticularDate(KeyType key)
 {
     //Initializing hash
     int i = hash(key);

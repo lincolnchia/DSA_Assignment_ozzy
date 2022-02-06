@@ -101,7 +101,7 @@ void particularDateGuest(ParticularDateHashTable dateHashTable)
 	cout << "Enter date: ";
 	getline(cin, desiredDate);
 
-	vector<ItemType1> array = dateHashTable.get(desiredDate);
+	vector<ItemType1> array = dateHashTable.getParticularDate(desiredDate);
 
 	for (int i = 0; i < array.size(); i++)
 	{
