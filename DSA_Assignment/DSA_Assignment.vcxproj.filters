@@ -30,7 +30,10 @@
     <ClCompile Include="BookingHashTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ParticularDateHashTable.cpp">
+    <ClCompile Include="Rooms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomsList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +47,10 @@
     <ClInclude Include="BookingHashTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParticularDateHashTable.h">
+    <ClInclude Include="Rooms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomsList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
