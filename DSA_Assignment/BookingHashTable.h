@@ -4,9 +4,11 @@
 #include<iostream>
 #include"Bookings.h"
 #include <vector>
+#include "ArrayListingBookings.h"
+
 using namespace std;
 
-const int MAX_SIZE = 101;
+const int MAX_SIZEHashTable = 101;
 typedef string KeyType;
 typedef Bookings ItemType1;
 
@@ -21,7 +23,7 @@ class BookingHashTable
 {
 private:
 
-	Node* items[MAX_SIZE];
+	Node* items[MAX_SIZEHashTable];
 	int  size;			// number of items in the BookingHashTable
 
 public:
@@ -53,7 +55,7 @@ public:
 	// pre : key must exist in the BookingHashTable
 	// post: none
 	// return the item with the specified key from the BookingHashTable
-	vector<ItemType1> get(KeyType key);
+	ArrayListingBookings get(KeyType key);
 
 	// check if the BookingHashTable is empty
 	// pre : none

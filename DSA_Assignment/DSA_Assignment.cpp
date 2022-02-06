@@ -4,7 +4,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
 #include <sstream>
 #include <ctime>
 #include <string.h>
@@ -17,7 +16,9 @@
 #include <time.h>
 #include <iomanip>
 #include "ParticularDateHashTable.h"
- 
+#include "ArrayList.h"
+#include "ArrayListingBookings.h"
+
 using namespace std;
  
 void particularDateGuest(ParticularDateHashTable dateHashTable);
@@ -222,12 +223,12 @@ void particularDateGuest(ParticularDateHashTable dateHashTable)
 	string input;
 	cout << "Enter date: ";
 	getline(cin, desiredDate);
+	dateHashTable.getParticularDate(desiredDate);
+	/*ArrayListingBookings array = dateHashTable.getParticularDate(desiredDate);*/
 
-	vector<ItemType1> array = dateHashTable.getParticularDate(desiredDate);
-
-	for (int i = 0; i < array.size(); i++)
+	/*for (int i = 0; i < array.getLength(); i++)
 	{
-		Bookings pulledBooking = array[i];
+		Bookings pulledBooking = array.get(i);
 		cout << endl;
 		cout << "==== " << "Booking ID: " << pulledBooking.getBookingID() << " ====" << endl;
 		cout << endl;
@@ -239,7 +240,7 @@ void particularDateGuest(ParticularDateHashTable dateHashTable)
 		cout << "Check-out Date: " << pulledBooking.getCheckOut() << endl;
 		cout << "Status: " << pulledBooking.getRoomStatus() << endl;
 		cout << "Date Booked: " << pulledBooking.getBookingDate() << endl;
-	}
+	}*/
 }
 void Checkinguest(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable) {
 	//declaring of variables
@@ -251,11 +252,11 @@ void Checkinguest(BookingHashTable hashBookingTable, RoomsList finalRoomsList, P
 	cout << "Input name to be book:";
 	getline(cin, NameInput);
 	cout << endl;
-	vector<ItemType1> array = hashBookingTable.get(NameInput);
+	ArrayListingBookings array = hashBookingTable.get(NameInput);
 	int bookingsCounter = 0;
 
-	for (int i = 0; i < array.size();i++) {
-		Bookings newbooking = array[i];
+	for (int i = 0; i < array.getLength();i++) {
+		Bookings newbooking = array.get(i);
 		if (newbooking.getRoomStatus() != "Checked Out" && newbooking.getRoomStatus() != "Checked In") {
 			cout << "Booking ID: " << newbooking.getBookingID() << " ";
 			cout << "Check In date: " << newbooking.getCheckIn() << " " << endl;
@@ -280,26 +281,27 @@ void Checkinguest(BookingHashTable hashBookingTable, RoomsList finalRoomsList, P
 		ss << bookingInput;
 		ss >> intbookingInput;
 
-		for (int i = 0; i < array.size();i++)
+		for (int i = 0; i < array.getLength();i++)
 		{
-			if (array[i].getBookingID() == bookingInput)
+			if (array.get(i).getBookingID() == bookingInput)
 			{
 				for (int j = 0; j < finalRoomsList.getLength(); j++) {
-					if (finalRoomsList.get(j).getRoom_Type() == array[i].getRoomType() && finalRoomsList.get(j).getStatus() == "No") {
+					if (finalRoomsList.get(j).getRoom_Type() == array.get(i).getRoomType() && finalRoomsList.get(j).getStatus() == "No") {
 						Bookings updatedBooking;
-						updatedBooking.setBookingID(array[i].getBookingID());
-						updatedBooking.setBookingDate(array[i].getBookingDate());
-						updatedBooking.setGuestName(array[i].getGuestName());
+						updatedBooking.setBookingID(array.get(i).getBookingID());
+						updatedBooking.setBookingDate(array.get(i).getBookingDate());
+						updatedBooking.setGuestName(array.get(i).getGuestName());
 						updatedBooking.setRoomNo(finalRoomsList.get(j).getRoom_number());
-						updatedBooking.setRoomType(array[i].getRoomType());
+						updatedBooking.setRoomType(array.get(i).getRoomType());
 						updatedBooking.setRoomStatus("Checked In");
-						updatedBooking.setCheckIn(array[i].getCheckIn());
-						updatedBooking.setCheckOut(array[i].getCheckOut());
-						updatedBooking.setNumberGuest(array[i].getNumberGuest());
-						updatedBooking.setSpecialRequest(array[i].getSpecialRequest());
+						updatedBooking.setCheckIn(array.get(i).getCheckIn());
+						updatedBooking.setCheckOut(array.get(i).getCheckOut());
+						updatedBooking.setNumberGuest(array.get(i).getNumberGuest());
+						updatedBooking.setSpecialRequest(array.get(i).getSpecialRequest());
 						//Function to make object from BookingList
-						hashBookingTable.remove(array[i].getGuestName(), array[i]);
-						hashBookingTable.add(array[i].getGuestName(), updatedBooking);
+						hashBookingTable.remove(array.get(i).getGuestName(), array.get(i));
+						hashBookingTable.add(array.get(i).getGuestName(), updatedBooking);
+					    finalRoomsList.get(j).setStatus("Yes");
 						break;
 					}
 				}
@@ -350,12 +352,13 @@ void PrintBooking(BookingHashTable hashBookingTable) {
 	string NameInput;
 	cout << "Input name: ";
 	getline(cin, NameInput);
-	vector<ItemType1> array = hashBookingTable.get(NameInput);
-	for (int j = 0; j < array.size(); j++) {
-		cout << "Booking ID: " << array[j].getBookingID() << endl;
-		cout << "Booking Date: " << array[j].getBookingDate() << endl;
-		cout << "Check In Date: " << array[j].getCheckIn() << endl;
-		cout << "Booking Date: " << array[j].getRoomType() << endl << endl;
+	ArrayListingBookings array = hashBookingTable.get(NameInput);
+	for (int j = 0; j < array.getLength(); j++) {
+		cout << "Booking ID: " << array.get(j).getBookingID() << endl;
+		cout << "Booking Date: " << array.get(j).getBookingDate() << endl;
+		cout << "Check In Date: " << array.get(j).getCheckIn() << endl;
+		cout << "Booking Date: " << array.get(j).getRoomType() << endl;
+		cout << "Booking Status: " << array.get(j).getRoomStatus() << endl << endl;
 	}
 }
 

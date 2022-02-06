@@ -58,7 +58,7 @@ public:
 	// pre : key must exist in the BookingHashTable
 	// post: none
 	// return the item with the specified key from the BookingHashTable
-	vector<ItemType1> getParticularDate(KeyType key);
+	void getParticularDate (KeyType key);
 
 	// check if the BookingHashTable is empty
 	// pre : none

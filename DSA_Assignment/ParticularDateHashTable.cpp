@@ -5,6 +5,8 @@
 #include <string.h>
 #include <iostream>
 #include <fstream>
+#include "ArrayList.h"
+#include "ArrayListingBookings.h"
 
 ParticularDateHashTable::ParticularDateHashTable()
 {
@@ -144,14 +146,14 @@ void ParticularDateHashTable::remove(KeyType key)
 }
 
 // Returns the guests staying in the hotel on a particular date
-vector<ItemType1> ParticularDateHashTable::getParticularDate(KeyType key)
+void ParticularDateHashTable::getParticularDate(KeyType key)
 {
     //Initializing hash
     int i = hash(key);
 
     //Item
     ItemType1 item;
-    vector< ItemType1 > arr;
+    ArrayListingBookings arr;
 
     // Turning the user input into time_t object so I can compare to a room's checkIn/checkOut date
     char keyString[20];
@@ -189,14 +191,28 @@ vector<ItemType1> ParticularDateHashTable::getParticularDate(KeyType key)
         {
             //Set the returning item to the tempNode's item
             item = tempNode->item;
-            arr.push_back(item);
+            arr.add(item);
         }
         //Else move down the linked list
         tempNode = tempNode->next;
     }
-
+    for (int i = 0; i < arr.getLength(); i++)
+    {
+        Bookings pulledBooking = arr.get(i);
+        cout << endl;
+        cout << "==== " << "Booking ID: " << pulledBooking.getBookingID() << " ====" << endl;
+        cout << endl;
+        cout << "Guest Name: " << pulledBooking.getGuestName() << endl;
+        cout << "Room Type: " << pulledBooking.getRoomType() << endl;
+        cout << "Room No.: " << pulledBooking.getRoomNo() << endl;
+        cout << "Number of Guests: " << pulledBooking.getNumberGuest() << endl;
+        cout << "Check-in Date: " << pulledBooking.getCheckIn() << endl;
+        cout << "Check-out Date: " << pulledBooking.getCheckOut() << endl;
+        cout << "Status: " << pulledBooking.getRoomStatus() << endl;
+        cout << "Date Booked: " << pulledBooking.getBookingDate() << endl;
+    }
     //Return the item, item = "" if nothing found
-    return arr;
+    /*return arr;*/
 }
 
 // Hashing function for words i.e November 2021 and not DD/MM/YYYY
@@ -295,14 +311,14 @@ void ParticularDateHashTable::returnRoomsMonth(KeyType month, KeyType year)
 
     //Item
     ItemType1 item;
-    vector< ItemType1 > arr;
+    ArrayListingBookings arr;
 
     //Travelling linked list
     NodeDate* tempNode = items[hashKey];
     while (tempNode != NULL)
     {
         item = tempNode->item;
-        arr.push_back(item);
+        arr.add(item);
         //Else move down the linked list
         tempNode = tempNode->next;
     }
@@ -311,9 +327,9 @@ void ParticularDateHashTable::returnRoomsMonth(KeyType month, KeyType year)
 
     for (int i = 100; i <= 120; i++) 
     {
-        for (int arrayCounter = 0; arrayCounter < arr.size(); arrayCounter++) 
+        for (int arrayCounter = 0; arrayCounter < arr.getLength(); arrayCounter++) 
         {
-            Bookings pulledBooking = arr[arrayCounter];
+            Bookings pulledBooking = arr.get(arrayCounter);
             string roomNo = pulledBooking.getRoomNo();
 
             string delimiter = " ";

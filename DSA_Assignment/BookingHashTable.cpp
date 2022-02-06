@@ -1,4 +1,5 @@
 #include "BookingHashTable.h"
+#include "ArrayList.h"
 
 BookingHashTable::BookingHashTable()
 {
@@ -7,7 +8,7 @@ BookingHashTable::BookingHashTable()
 
 BookingHashTable::~BookingHashTable()
 {
-    for (int i = 0; i < MAX_SIZE; i++)
+    for (int i = 0; i < MAX_SIZEHashTable; i++)
     {
         items[i] = NULL;
     }
@@ -41,7 +42,7 @@ int BookingHashTable::hash(KeyType key)
         //From second letter of name onwards, us this hash
 
         //index of first letter * 52 + index of iteration letter % max size
-        i = (i * 52 + charvalue(key[j])) % MAX_SIZE;
+        i = (i * 52 + charvalue(key[j])) % MAX_SIZEHashTable;
     }
 
     return i;
@@ -156,14 +157,14 @@ void BookingHashTable::remove(KeyType key, ItemType1 bookingItem)
         }
     }
 }
-vector<ItemType1> BookingHashTable::get(KeyType key)
+ArrayListingBookings BookingHashTable::get(KeyType key)
 {
     //Initializing hash
     int i = hash(key);
 
     //Item
     ItemType1 item ;
-    vector< ItemType1 > arr;
+    ArrayListingBookings arr;
 
     //Travelling linked list
     Node* tempNode = items[i];
@@ -174,7 +175,7 @@ vector<ItemType1> BookingHashTable::get(KeyType key)
         {
             //Set the returning item to the tempNode's item
             item = tempNode->item;
-            arr.push_back(item);
+            arr.add(item);
         }
         //Else move down the linked list
         tempNode = tempNode->next;
@@ -198,7 +199,7 @@ int BookingHashTable::getLength()
 void BookingHashTable::print()
 {
     //For every position in the BookingHashTable,
-    for (int i = 0; i < MAX_SIZE; i++)
+    for (int i = 0; i < MAX_SIZEHashTable; i++)
     {
         //If position is not NULL
         if (items[i] != NULL)

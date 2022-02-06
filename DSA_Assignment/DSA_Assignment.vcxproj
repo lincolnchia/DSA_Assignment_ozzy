@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArrayList.cpp" />
+    <ClCompile Include="ArrayListBookings.cpp" />
     <ClCompile Include="BookingHashTable.cpp" />
     <ClCompile Include="Bookings.cpp" />
     <ClCompile Include="DSA_Assignment.cpp" />
@@ -149,6 +151,8 @@
     <ClCompile Include="RoomsList.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArrayList.h" />
+    <ClInclude Include="ArrayListingBookings.h" />
     <ClInclude Include="BookingHashTable.h" />
     <ClInclude Include="Bookings.h" />
     <ClInclude Include="List.h" />
