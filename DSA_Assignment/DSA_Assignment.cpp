@@ -168,6 +168,7 @@ void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, Particula
 	string input;
 	string datetime;
 	tm result{};
+	cout << endl;
 	cout << "============================Menu============================" << endl;
 	cout << "1) Check in guest " << endl;
 	cout << "2) Add a new booking for the hotel" << endl;
@@ -179,6 +180,7 @@ void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, Particula
 	cout << "8) Export data to excel" << endl;
 	cout << "0) Exit Functions" << endl;
 	cout << "============================================================"<< endl;
+	cout << endl;
 	cout << "Input options:" ;
 	getline(cin, input);
 
@@ -327,6 +329,7 @@ void CreateBooking(BookingHashTable hashBookingTable, RoomsList finalRoomsList, 
 	string input;
 	string name;
 	Bookings CreateNewBooking;
+	cout << endl;
 	cout << "Input Name: ";
 	getline(cin, name);
 	CreateNewBooking.setGuestName(name);

@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const int MAX_SIZEHashTable = 101;
+const int MAX_SIZEHashTable = 201;
 typedef string KeyType;
 typedef Bookings ItemType1;
 

@@ -2,7 +2,7 @@
 #pragma once;
 using namespace std;
 
-const int MAX_SIZEArrayListingBooking = 100;
+const int MAX_SIZEArrayListingBooking = 200;
 typedef Bookings ItemType1;
 
 class ArrayListingBookings
