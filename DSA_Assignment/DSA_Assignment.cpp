@@ -157,6 +157,16 @@ int main()
 
 	particularDateGuest(dateHashTable);
 
+
+	string inputMonth;
+	string inputYear;
+
+	cout << "Enter month: ";
+	getline(cin, inputMonth);
+	cout << "Enter year: ";
+	getline(cin, inputYear);
+	dateHashTable.returnRoomsMonth(inputMonth, inputYear);
+
 	//Menu(hashBookingTable);
 }
 
@@ -176,7 +186,7 @@ void particularDateGuest(ParticularDateHashTable dateHashTable)
 	{
 		Bookings pulledBooking = array[i];
 		cout << endl;
-		cout << "====" << "Booking ID: " << pulledBooking.getBookingID() << "====" << endl;
+		cout << "==== " << "Booking ID: " << pulledBooking.getBookingID() << " ====" << endl;
 		cout << endl;
 		cout << "Guest Name: " << pulledBooking.getGuestName() << endl;
 		cout << "Room Type: " << pulledBooking.getRoomType() << endl;
