@@ -26,6 +26,8 @@ void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, Particula
 void Checkinguest(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable);
 void CreateBooking(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable);
 void PrintBooking(BookingHashTable hashBookingTable);
+void DeleteBooking(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable);
+void ExportExcel();
 
 int main()
 {
@@ -172,6 +174,7 @@ void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, Particula
 	cout << "3) Display guests staying in the hotel for a particular day" << endl;
 	cout << "4) Display particular month dates each room is occupied" << endl;
 	cout << "5) See the particular booking for guest using name" << endl;
+	cout << "6) Delete a Booking" << endl;
 	cout << "0) Exit Functions" << endl;
 	cout << "============================================================"<< endl;
 	cout << "Input options:" ;
@@ -205,6 +208,12 @@ void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, Particula
 	else if (input == "5") {
 		PrintBooking(hashBookingTable);
 		Menu(hashBookingTable, finalRoomsList, dateHashTable);
+	}
+	else if (input == "6") {
+		DeleteBooking(hashBookingTable, finalRoomsList, dateHashTable);
+	}
+	else if (input == "8") {
+		ExportExcel();
 	}
 	else if (input == "0") {
 		exit;
@@ -273,7 +282,7 @@ void Checkinguest(BookingHashTable hashBookingTable, RoomsList finalRoomsList, P
 
 	//asking for which booking to enter
 	else {
-		cout << "Which Booking would you like to book in for: ";
+		cout << "Which Booking would you like to check in for: ";
 		getline(cin, bookingInput);
 		cin.clear();
 		int intbookingInput;
@@ -360,6 +369,47 @@ void PrintBooking(BookingHashTable hashBookingTable) {
 		cout << "Booking Date: " << array.get(j).getRoomType() << endl;
 		cout << "Booking Status: " << array.get(j).getRoomStatus() << endl << endl;
 	}
+}
+void DeleteBooking(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable) {
+	string NameInput;
+	int counter = 0;
+	cout << "Input Name: ";
+	getline(cin, NameInput);
+	ArrayListingBookings array = hashBookingTable.get(NameInput);
+	for (int i = 0; i < array.getLength(); i++)
+	{
+		if (array.get(i).getGuestName() == NameInput && array.get(i).getRoomStatus() == "Booked")
+		{
+			cout << "Booking ID: " << array.get(i).getBookingID() << endl;
+			cout << "Check In: " << array.get(i).getCheckIn() << endl << endl;
+			counter++;
+		}
+	}
+	if (counter == 0) {
+		cout << "There are no bookings" << endl <<endl;
+	}
+	else 
+	{
+		string bookingInput;
+		cout << "Which Booking would you like to remove: ";
+		getline(cin, bookingInput);
+		cin.clear();
+
+		for (int i = 0; i < array.getLength();i++)
+		{
+			if (array.get(i).getBookingID() == bookingInput)
+			{
+				hashBookingTable.remove(array.get(i).getGuestName(), array.get(i));
+				break;
+			}
+		}
+	}
+
+	
+	Menu(hashBookingTable, finalRoomsList, dateHashTable);
+}
+void ExportExcel() {
+
 }
 
 
