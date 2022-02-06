@@ -116,6 +116,46 @@ void BookingHashTable::remove(KeyType key)
     }
 }
 
+void BookingHashTable::remove(KeyType key, ItemType1 bookingItem)
+{
+    //Initializing the hash
+    int i = hash(key);
+
+    //If the position in the BookingHashTable is not empty,
+    if (items[i] != NULL)
+    {
+        //Check if the first item shares the same key to delete it
+        if (items[i]->item.getBookingID() == bookingItem.getBookingID())
+        {
+            //Set the first BookingHashTable pointer to point to the second item
+            items[i] = items[i]->next;
+            //Decrease the size of the BookingHashTable
+            size--;
+        }
+        //If first item does not share the same key that we want to delete,
+        else
+        {
+            //Travel down the linked list
+            Node* tempNode = items[i];
+            //While the current node is not NULL,
+            //Using tempNode != NULL so that the final iteration also gets checked
+            //If using tempNode->next != NULL, tempNode will be set to the final node but will not be checked
+            while (tempNode->next != NULL)
+            {
+                //If the next node from the current one that we are on shares the same key that we want to delete,
+                if (tempNode->next->item.getBookingID() == bookingItem.getBookingID())
+                {
+                    //Set the current node's next to the one after the next one
+                    tempNode->next = tempNode->next->next;
+                    //Decrease the size of the BookingHashTable
+                    size--;
+                }
+                //Else if the next node from the current one that we are on does not share the same key that we want to delete, move on to the next node
+                tempNode = tempNode->next;
+            }
+        }
+    }
+}
 vector<ItemType1> BookingHashTable::get(KeyType key)
 {
     //Initializing hash

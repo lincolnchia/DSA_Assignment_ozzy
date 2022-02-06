@@ -47,7 +47,7 @@ public:
 	// post: item is removed from the BookingHashTable
 	//       size of BookingHashTable is decreased by 1
 	void remove(KeyType key);
-
+	void remove(KeyType key, ItemType1 item);
 
 	// get an item with the specified key in the BookingHashTable (retrieve)
 	// pre : key must exist in the BookingHashTable

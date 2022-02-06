@@ -1,5 +1,6 @@
 // DSA_Assignment.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+#pragma warning(disable : 4996)
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -10,20 +11,70 @@
 #include "list.h"
 #include "Bookings.h"
 #include "BookingHashTable.h"
+#include "Rooms.h"
+#include "RoomsList.h"
+#include <stdio.h>      
+#include <time.h>
+#include <iomanip>
  
 using namespace std;
  
-int sscanf_s();
-void Menu(BookingHashTable hashBookingTable);
+void Menu(BookingHashTable hashBookingTable, RoomsList roomsList);
 
 int main()
 {
 	List bookingList;
+	List roomsList;
+	RoomsList finalRoomsList;
 	BookingHashTable hashBookingTable;
 	hashBookingTable.~BookingHashTable();
+
 	ifstream myFile;
 	myFile.open("BookingsAssignment.csv");
-	
+
+	ifstream nextFile;
+	nextFile.open("Rooms.csv");
+
+	//Loading in Rooms file
+	while (nextFile.good())
+	{
+		string line;
+		getline(nextFile, line, ',');
+		if (line.find("\n") != string::npos)
+		{
+			string delimiter = "\n";
+			size_t pos = 0;
+			string token;
+			//finding the point at which we want to split the string
+			while ((pos = line.find(delimiter)) != string::npos)
+			{
+				//saving the first half of the string
+				Rooms newRoom;
+				token = line.substr(0, pos);
+				roomsList.add(token);
+				if (roomsList.get(2) != "Cost per night") {
+					newRoom.setRoom_number(roomsList.get(0));
+					newRoom.setRoom_Type(roomsList.get(1));
+					newRoom.setCost_per_night(roomsList.get(2));
+					newRoom.setStatus("No");
+					finalRoomsList.add(newRoom);
+				}
+
+				for (int i = 0; i < 4;i++) {
+					roomsList.remove(0);
+				}
+
+				//saving the second half of the string
+				line.erase(0, pos + delimiter.length());
+				roomsList.add(line);
+			}
+		}
+		//adding the lines regularly
+		else {
+			roomsList.add(line);
+		}
+	}
+
 	//Adding the Bookings CSV into Linked List
 	while (myFile.good()) 
 	{
@@ -54,6 +105,23 @@ int main()
 					newBooking.setRoomNo(bookingList.get(3));
 					newBooking.setRoomType(bookingList.get(4));
 					newBooking.setRoomStatus(bookingList.get(5));
+					//Adding status to the rooms 
+					if (bookingList.get(5) == "Checked In")
+					{
+						//Runs through the final rooms list 
+						for (int i = 0; i < finalRoomsList.getLength(); i++) {
+							//Checks that newbookings room is the same as in room
+							if (bookingList.get(3) == finalRoomsList.get(i).getRoom_number()) {
+								Rooms newRoom;
+								newRoom.setRoom_number(finalRoomsList.get(i).getRoom_number());
+								newRoom.setCost_per_night(finalRoomsList.get(i).getCost_per_night());
+								newRoom.setRoom_Type(finalRoomsList.get(i).getRoom_Type());
+								newRoom.setStatus("True");
+								finalRoomsList.remove(i);
+								finalRoomsList.add(i, newRoom);
+							}
+						}
+					}
 					newBooking.setCheckIn(bookingList.get(6));
 					newBooking.setCheckOut(bookingList.get(7));
 					newBooking.setNumberGuest(bookingList.get(8));
@@ -79,29 +147,97 @@ int main()
 		else
 			bookingList.add(line);
 	}
-	Menu(hashBookingTable);
+	Menu(hashBookingTable, finalRoomsList);
 }
 
-void Menu(BookingHashTable hashBookingTable) {
+void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList) {
 	string input;
+	string NameInput;
+	string bookingInput;
 	string datetime;
 	char aString[20];
 	tm result{};
-	cout << "Input name to be book:" ;
+	cout << "==========Menu==========" << endl;
+	cout << "1) Check In guest " << endl;
+	cout << "2) Add a new booking for the hotel" << endl;
+	cout << "========================"<< endl;
+	cout << "Input options:" ;
 	getline(cin, input);
-	vector<ItemType1> array = hashBookingTable.get	(input);
-	for (int i = 0; i < array.size();i++) {
-		Bookings newbooking = array[i];
-		cout << newbooking.getBookingID() << endl;
-		datetime = newbooking.getCheckIn();
-		strcpy_s(aString, datetime.c_str());
-		sscanf_s(aString, "%d/%d/%4d  %d:%d:%d", &result.tm_mday, &result.tm_mon, &result.tm_year, &result.tm_hour, &result.tm_min, &result.tm_sec);
-		result.tm_year = result.tm_year - 1900;
-		result.tm_mon = result.tm_mon - 1;
-		time_t t = mktime(&result);
-		cout << t << endl;
+
+	if (input =="1")
+	{
+		//declaring of variables
+		string datetime;
+		char aString[20];
+		tm result{};
+		// Get the name value 
+		cout << "Input name to be book:";
+		getline(cin, NameInput);
+		cout << endl;
+		vector<ItemType1> array = hashBookingTable.get(NameInput);
+		int bookingsCounter = 0;
+
+		for (int i = 0; i < array.size();i++) {
+			Bookings newbooking = array[i];
+			if (newbooking.getRoomStatus() != "Checked Out" && newbooking.getRoomStatus() != "Checked In") {
+				cout << "Booking ID: " << newbooking.getBookingID() << " ";
+				cout << "Check In date: " << newbooking.getCheckIn() << " " << endl;
+				//adding to the size of the bookings
+				bookingsCounter++;
+			}
+		}
+
+		// Checking if there are any bookings
+		if (bookingsCounter == 0) 
+		{
+			cout << "There are no bookings" << endl << endl;
+		}
+
+		//asking for which booking to enter
+		else {
+			cout << "Which Booking would you like to book in for: ";
+			getline(cin, bookingInput);
+			cin.clear();
+			int intbookingInput;
+			stringstream ss;
+			ss << bookingInput;
+			ss >> intbookingInput;
+
+			for (int i = 0; i < array.size();i++) 
+			{
+				if (array[i].getBookingID() == bookingInput)
+				{
+					for (int j = 0; j < finalRoomsList.getLength(); j++) {
+						if (finalRoomsList.get(j).getRoom_Type() == array[i].getRoomType() && finalRoomsList.get(j).getStatus() == "No") {
+							Bookings updatedBooking;
+							updatedBooking.setBookingID(array[i].getBookingID());
+							updatedBooking.setBookingDate(array[i].getBookingDate());
+							updatedBooking.setGuestName(array[i].getGuestName());
+							updatedBooking.setRoomNo(finalRoomsList.get(j).getRoom_number());
+							updatedBooking.setRoomType(array[i].getRoomType());
+							updatedBooking.setRoomStatus("Checked In");
+							updatedBooking.setCheckIn(array[i].getCheckIn());
+							updatedBooking.setCheckOut(array[i].getCheckOut());
+							updatedBooking.setNumberGuest(array[i].getNumberGuest());
+							updatedBooking.setSpecialRequest(array[i].getSpecialRequest());
+							//Function to make object from BookingList
+							hashBookingTable.remove(array[i].getGuestName(),array[i]);
+							hashBookingTable.add(array[i].getGuestName(), updatedBooking);
+							break;
+						}
+					}
+				}
+			}
+
+		}
+		Menu(hashBookingTable, finalRoomsList);
+	}
+	else if (input == "2")
+	{   
+		Menu(hashBookingTable, finalRoomsList);
 	}
 }
+
 
 
 
