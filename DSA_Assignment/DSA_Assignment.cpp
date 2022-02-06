@@ -20,10 +20,9 @@
  
 using namespace std;
  
-int sscanf_s();
-void Menu(BookingHashTable hashBookingTable);
 void particularDateGuest(ParticularDateHashTable dateHashTable);
-void Menu(BookingHashTable hashBookingTable, RoomsList roomsList);
+void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable);
+void Checkinguest(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable);
 
 int main()
 {
@@ -155,23 +154,62 @@ int main()
 			bookingList.add(line);
 	}
 
-	particularDateGuest(dateHashTable);
-
-
-	string inputMonth;
-	string inputYear;
-
-	cout << "Enter month: ";
-	getline(cin, inputMonth);
-	cout << "Enter year: ";
-	getline(cin, inputYear);
-	dateHashTable.returnRoomsMonth(inputMonth, inputYear);
-
-	//Menu(hashBookingTable);
+	Menu(hashBookingTable,finalRoomsList,dateHashTable);
 }
 
  //Displaying guests staying in the hotel on a particular date
-void particularDateGuest(ParticularDateHashTable dateHashTable) 
+
+void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable) {
+	string input;
+	string datetime;
+	char aString[20];
+	tm result{};
+	cout << "============================Menu============================" << endl;
+	cout << "1) Check in guest " << endl;
+	cout << "2) Add a new booking for the hotel" << endl;
+	cout << "3) Display guests staying in the hotel for a particular day" << endl;
+	cout << "4) Add a new booking for the hotel" << endl;
+	cout << "5) See the particular booking for guest using name" << endl;
+	cout << "============================================================"<< endl;
+	cout << "Input options:" ;
+	getline(cin, input);
+
+	if (input =="1")
+	{
+		Checkinguest(hashBookingTable, finalRoomsList, dateHashTable);
+		Menu(hashBookingTable, finalRoomsList, dateHashTable);
+	}
+	else if (input == "2")
+	{   
+		Menu(hashBookingTable, finalRoomsList, dateHashTable);
+	}
+	else if (input == "3") {
+		particularDateGuest(dateHashTable);
+		Menu(hashBookingTable, finalRoomsList, dateHashTable);
+	}
+	else if (input == "4") {
+		string inputMonth;
+		string inputYear;
+
+		cout << "Enter month: ";
+		getline(cin, inputMonth);
+		cout << "Enter year: ";
+		getline(cin, inputYear);
+		dateHashTable.returnRoomsMonth(inputMonth, inputYear);
+		Menu(hashBookingTable, finalRoomsList, dateHashTable);
+	}
+	else if (input == "5") {
+		cout << "nada";
+	}
+	else if (input == "0") {
+		exit;
+	}
+	else {
+		cout << "invalid input, Please try again!"<< endl;
+	}
+}
+
+void particularDateGuest(ParticularDateHashTable dateHashTable)
 {
 
 	cout << "==== " << "Guests staying at hotel on a particular date" << " ====" << endl;
@@ -198,92 +236,72 @@ void particularDateGuest(ParticularDateHashTable dateHashTable)
 		cout << "Date Booked: " << pulledBooking.getBookingDate() << endl;
 	}
 }
-
-void Menu(BookingHashTable hashBookingTable, RoomsList finalRoomsList) {
-	string input;
+void Checkinguest(BookingHashTable hashBookingTable, RoomsList finalRoomsList, ParticularDateHashTable dateHashTable) {
+	//declaring of variables
 	string NameInput;
 	string bookingInput;
 	string datetime;
 	char aString[20];
 	tm result{};
-	cout << "==========Menu==========" << endl;
-	cout << "1) Check In guest " << endl;
-	cout << "2) Add a new booking for the hotel" << endl;
-	cout << "========================"<< endl;
-	cout << "Input options:" ;
-	getline(cin, input);
+	// Get the name value 
+	cout << "Input name to be book:";
+	getline(cin, NameInput);
+	cout << endl;
+	vector<ItemType1> array = hashBookingTable.get(NameInput);
+	int bookingsCounter = 0;
 
-	if (input =="1")
+	for (int i = 0; i < array.size();i++) {
+		Bookings newbooking = array[i];
+		if (newbooking.getRoomStatus() != "Checked Out" && newbooking.getRoomStatus() != "Checked In") {
+			cout << "Booking ID: " << newbooking.getBookingID() << " ";
+			cout << "Check In date: " << newbooking.getCheckIn() << " " << endl;
+			//adding to the size of the bookings
+			bookingsCounter++;
+		}
+	}
+
+	// Checking if there are any bookings
+	if (bookingsCounter == 0)
 	{
-		//declaring of variables
-		string datetime;
-		char aString[20];
-		tm result{};
-		// Get the name value 
-		cout << "Input name to be book:";
-		getline(cin, NameInput);
-		cout << endl;
-		vector<ItemType1> array = hashBookingTable.get(NameInput);
-		int bookingsCounter = 0;
+		cout << "There are no bookings" << endl << endl;
+	}
 
-		for (int i = 0; i < array.size();i++) {
-			Bookings newbooking = array[i];
-			if (newbooking.getRoomStatus() != "Checked Out" && newbooking.getRoomStatus() != "Checked In") {
-				cout << "Booking ID: " << newbooking.getBookingID() << " ";
-				cout << "Check In date: " << newbooking.getCheckIn() << " " << endl;
-				//adding to the size of the bookings
-				bookingsCounter++;
-			}
-		}
+	//asking for which booking to enter
+	else {
+		cout << "Which Booking would you like to book in for: ";
+		getline(cin, bookingInput);
+		cin.clear();
+		int intbookingInput;
+		stringstream ss;
+		ss << bookingInput;
+		ss >> intbookingInput;
 
-		// Checking if there are any bookings
-		if (bookingsCounter == 0) 
+		for (int i = 0; i < array.size();i++)
 		{
-			cout << "There are no bookings" << endl << endl;
-		}
-
-		//asking for which booking to enter
-		else {
-			cout << "Which Booking would you like to book in for: ";
-			getline(cin, bookingInput);
-			cin.clear();
-			int intbookingInput;
-			stringstream ss;
-			ss << bookingInput;
-			ss >> intbookingInput;
-
-			for (int i = 0; i < array.size();i++) 
+			if (array[i].getBookingID() == bookingInput)
 			{
-				if (array[i].getBookingID() == bookingInput)
-				{
-					for (int j = 0; j < finalRoomsList.getLength(); j++) {
-						if (finalRoomsList.get(j).getRoom_Type() == array[i].getRoomType() && finalRoomsList.get(j).getStatus() == "No") {
-							Bookings updatedBooking;
-							updatedBooking.setBookingID(array[i].getBookingID());
-							updatedBooking.setBookingDate(array[i].getBookingDate());
-							updatedBooking.setGuestName(array[i].getGuestName());
-							updatedBooking.setRoomNo(finalRoomsList.get(j).getRoom_number());
-							updatedBooking.setRoomType(array[i].getRoomType());
-							updatedBooking.setRoomStatus("Checked In");
-							updatedBooking.setCheckIn(array[i].getCheckIn());
-							updatedBooking.setCheckOut(array[i].getCheckOut());
-							updatedBooking.setNumberGuest(array[i].getNumberGuest());
-							updatedBooking.setSpecialRequest(array[i].getSpecialRequest());
-							//Function to make object from BookingList
-							hashBookingTable.remove(array[i].getGuestName(),array[i]);
-							hashBookingTable.add(array[i].getGuestName(), updatedBooking);
-							break;
-						}
+				for (int j = 0; j < finalRoomsList.getLength(); j++) {
+					if (finalRoomsList.get(j).getRoom_Type() == array[i].getRoomType() && finalRoomsList.get(j).getStatus() == "No") {
+						Bookings updatedBooking;
+						updatedBooking.setBookingID(array[i].getBookingID());
+						updatedBooking.setBookingDate(array[i].getBookingDate());
+						updatedBooking.setGuestName(array[i].getGuestName());
+						updatedBooking.setRoomNo(finalRoomsList.get(j).getRoom_number());
+						updatedBooking.setRoomType(array[i].getRoomType());
+						updatedBooking.setRoomStatus("Checked In");
+						updatedBooking.setCheckIn(array[i].getCheckIn());
+						updatedBooking.setCheckOut(array[i].getCheckOut());
+						updatedBooking.setNumberGuest(array[i].getNumberGuest());
+						updatedBooking.setSpecialRequest(array[i].getSpecialRequest());
+						//Function to make object from BookingList
+						hashBookingTable.remove(array[i].getGuestName(), array[i]);
+						hashBookingTable.add(array[i].getGuestName(), updatedBooking);
+						break;
 					}
 				}
 			}
-
 		}
-		Menu(hashBookingTable, finalRoomsList);
-	}
-	else if (input == "2")
-	{   
-		Menu(hashBookingTable, finalRoomsList);
+
 	}
 }
 
